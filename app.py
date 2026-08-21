@@ -4,8 +4,13 @@ from discord.ext import commands
 import io
 import random
 import string
+import os
+from dotenv import load_dotenv
 
-# ---------- Pure data obfuscator (6 reversals) ----------
+# ---------- Load environment variables from .env ----------
+load_dotenv()  # looks for a .env file in the current folder
+
+# ---------- Pure data obfuscator (6 reversals, only numbers and strings) ----------
 def obfuscate_python(source: str) -> str:
     data = list(source.encode('utf-8'))
     for _ in range(6):
@@ -81,13 +86,10 @@ async def obf(interaction: discord.Interaction, attachment: discord.Attachment):
     file_obj = discord.File(io.BytesIO(obfuscated.encode('utf-8')), filename=out_name)
     await interaction.followup.send('**made by darien**', file=file_obj)
 
-# ---------- Run: Read token from key.env and start bot ----------
+# ---------- Run ----------
 if __name__ == '__main__':
-    try:
-        with open('key.env', 'r') as f:
-            bot.run(f.read().strip())   # token passed directly – no variable
-    except FileNotFoundError:
-        print('❌ key.env not found. Please create it with your token.')
+    TOKEN = os.getenv('MTUzOTk4MjI2MTUzNjAzODkyMg.G44j8q.xRYX5i3aogb1sAM_yJkFA1hu_PfLr9t2K0A5_k')
+    if not TOKEN:
+        print('❌ DISCORD_TOKEN not found in environment. Check your .env file.')
         exit(1)
-    except Exception as e:
-        print(f'❌ Error: {e}')
+    bot.run(TOKEN)
