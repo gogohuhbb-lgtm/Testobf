@@ -5,7 +5,7 @@ import io
 import random
 import string
 
-# ---------- Pure data obfuscator (6 reversals, only numbers and strings) ----------
+# ---------- Pure data obfuscator (6 reversals) ----------
 def obfuscate_python(source: str) -> str:
     data = list(source.encode('utf-8'))
     for _ in range(6):
@@ -81,16 +81,13 @@ async def obf(interaction: discord.Interaction, attachment: discord.Attachment):
     file_obj = discord.File(io.BytesIO(obfuscated.encode('utf-8')), filename=out_name)
     await interaction.followup.send('**made by darien**', file=file_obj)
 
-# ---------- Run ----------
+# ---------- Run: Read token from key.env and start bot ----------
 if __name__ == '__main__':
-    # Read token from key.env file (must be in the same directory)
     try:
         with open('key.env', 'r') as f:
-            TOKEN = f.read().strip()
+            bot.run(f.read().strip())   # token passed directly – no variable
     except FileNotFoundError:
-        print('❌ key.env file not found!')
+        print('❌ key.env not found. Please create it with your token.')
         exit(1)
-    if not TOKEN:
-        print('❌ key.env is empty!')
-        exit(1)
-    bot.run(TOKEN)
+    except Exception as e:
+        print(f'❌ Error: {e}')
