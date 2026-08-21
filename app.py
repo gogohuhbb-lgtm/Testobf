@@ -80,3 +80,17 @@ async def obf(interaction: discord.Interaction, attachment: discord.Attachment):
 
     file_obj = discord.File(io.BytesIO(obfuscated.encode('utf-8')), filename=out_name)
     await interaction.followup.send('**made by darien**', file=file_obj)
+
+# ---------- Run ----------
+if __name__ == '__main__':
+    # Read token from key.env file (must be in the same directory)
+    try:
+        with open('key.env', 'r') as f:
+            TOKEN = f.read().strip()
+    except FileNotFoundError:
+        print('❌ key.env file not found!')
+        exit(1)
+    if not TOKEN:
+        print('❌ key.env is empty!')
+        exit(1)
+    bot.run(TOKEN)
